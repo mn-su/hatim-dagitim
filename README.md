@@ -1,83 +1,86 @@
-# 📖 Ramazan ve Yıllık Hatim Takip Sistemi
+# 📖 Ramazan ve Yıllık Hatim Takip Sistemi (v2)
 
-> Ramazan ayı günlük ve yıllık haftalık Kur'an-ı Kerim okuma programları oluşturma aracı
+Bu depo, Ramazan ayı için günlük ve yıl boyunca haftalık Kur'an-ı Kerim okuma programları oluşturmak amacıyla geliştirilmiş hafif, tek sayfa (vanilla) HTML uygulamasıdır.
 
 ## 🌙 Özellikler
 
-- **📅 Ramazan Günlük Program**: 30 gün boyunca her gün bir cüz takibi
-- **📆 Yıllık Haftalık Program**: 46 haftalık döngüde tüm yıl boyunca hatme devam etme
-- **🎯 Farklı Başlangıç Cüzleri**: Her kişi istediği cüzden başlayabilir
-- **🔎 Tek Cüz Gösterimi**: Cüz numarası verildiğinde sadece o cüzün programı
-- **🖨️ Yazdırma Özelliği**: A4 yatay 5 sütunlu profesyonel çıktı
-- **📱 Modern Arayüz**: Kullanıcı dostu tasarım
+- **📅 Ramazan Günlük Program**: 30 gün boyunca her gün bir cüz takibi.
+- **📆 Yıllık Haftalık Program**: 46 haftalık döngüde yıl boyunca okuma programı.
+- **🎯 Farklı Başlangıç Cüzleri**: Her kişi istediği cüzden başlayabilir.
+- **🔎 Tek Cüz Gösterimi**: Belirli bir cüz için sadece o cüzün programını görüntüleyin.
+- **🖨️ Yazdırma Özelliği**: A4 yatay 5 sütunlu yazdırma için optimize.
+- **📱 Modern Arayüz**: Basit, tarayıcıda çalışır, bağımlılık yok.
 
 ## 🚀 Kullanım
 
 ### Online
-[GitHub Pages Demo](https://mn-su.github.io/hatim-takip)
+- Demo: https://mn-su.github.io/hatim-takip
 
 ### Yerel
-`index.html` dosyasını tarayıcıda açın.
+- Tarayıcınızda `index.html` dosyasını açın. Not: eski sürüm `v1.html` olarak saklanmıştır; `v2.html` içeriği şimdi `index.html` olarak kullanılmaktadır.
 
-## 📋 Nasıl Çalışır?
+## 📋 Nasıl Çalışır
 
-1. **Tarih Ayarlama**: Başlangıç tarihlerini seçin.
-2. **Liste Oluşturma**: RAMAZAN veya YILLIK butonuna tıklayın.
-3. **Tek Cüz (Opsiyonel)**: Cüz numarasını girip “Sadece Bu Cüzü Göster” butonuna basın.
-4. **Yazdırma**: 🖨️ YAZDIR butonuyla PDF olarak kaydedin.
+1. Başlangıç tarihlerini seçin (`Ramazan Başlangıcı` ve `Yıllık Başlangıç`).
+2. `RAMAZAN (GÜNLÜK)` veya `YILLIK (HAFTALIK)` butonuna tıklayarak liste oluşturun.
+3. (Opsiyonel) `Cüz Numarası` girerek sadece o cüzü gösterin ya da `Sadece Bu Cüzü Göster` butonunu kullanın.
+4. Yeni: `🔄 İkisini Birlikte Getir` ile aynı sayfada hem Ramazan hem Yıllık programı yan yana oluşturun.
+5. `🖨️ Listeyi Yazdır` ile PDF/kağıda yazdırın.
 
-### Sayfa Düzeni
-Program 6 sayfa (30 cüz × 5 sütun) oluşturur. Her sütun bir kişinin programını içerir.
+## Yeni — v2 Değişiklikleri
 
-## 📊 Kullanım Senaryoları
-
-### Cami/Kurum Dağıtımı
-Her cemaate farklı cüzden başlayan program verilebilir. Herkes farklı cüzü aynı gün okur ve toplu hatim tamamlanır.
-
-### Bireysel Kullanım
-Ramazan ayında veya yıl boyunca kendi okuma programınızı oluşturun.
+- **Hadis Kutusu**: Arayüzün üstünde dual amaçlı bilgi/hadis kutusu eklendi (tasarımda yeşil degrade ve alıntı görünümü).
+- **İkisini Birlikte Getir**: `showBothCuz()` / `renderBothPrograms()` fonksiyonları eklendi — seçilen cüz için Ramazan (günlük) ve Yıllık (haftalık) programları tek sayfada yan yana render eder.
+- **Bildirimler (Toast)**: Başarı/hata bildirimleri için kayan animasyonlu bildirim kutuları (`showNotification`) eklendi.
+- **Form Geliştirmeleri**: Tarih ve cüz alanlarında validasyon ve temizleme düğmesi (`Listeyi Temizle`).
+- **Yazdırma ve Sayfa Düzeni İyileştirmeleri**: A4 yatay üzerinde sütun genişlikleri, sayfa boş sütun görünürlüğü kontrolü ve `@page` ayarları düzenlendi.
+- **JS Fonksiyonları (geliştirici notları)**: `renderList`, `renderBothPrograms`, `showSingleCuz`, `showBothCuz`, `showAll`, `showNotification` gibi yardımcı fonksiyonlar eklendi/iyileştirildi.
 
 ## 🛠️ Teknik Detaylar
 
-- Tek HTML dosyası, bağımlılık yok
-- Modern tüm tarayıcılarda çalışır
-- Print-friendly CSS ile optimize
+- Tek HTML dosyası (`index.html`, v2 olarak) ve dahili CSS/JS. Not: eski sürüm `v1.html` olarak korunmuştur.
+- Modern tarayıcılarda çalışır; ek bağımlılık gerektirmez.
+- Yazdırma için özel CSS kuralları ve `@media print` içerir.
+
+## 📊 Kullanım Senaryoları
+
+- Cami veya kurumlarda farklı cüzlerden başlanarak toplu hatim planlama.
+- Bireysel kullanım için Ramazan veya yıl boyunca okuma programı oluşturma.
 
 ## 🤝 Katkıda Bulunma
 
-1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/YeniOzellik`)
-3. Commit edin (`git commit -m 'Yeni özellik eklendi'`)
-4. Push edin (`git push origin feature/YeniOzellik`)
-5. Pull Request açın
+1. Depoyu fork edin.
+2. Yeni bir branch oluşturun: `git checkout -b feature/YeniOzellik`.
+3. Değişikliklerinizi commit edin.
+4. Branch'i push edin ve pull request açın.
 
 ---
 
-## 🌍 English
+# 📖 Ramadan & Annual Quran Reading Tracker (v2)
 
-# 📖 Ramadan & Annual Quran Reading Tracker
+A lightweight single-file HTML tool to generate daily Ramadan and weekly annual Quran reading schedules.
 
-A tool to generate daily Ramadan and weekly annual Quran reading schedules.
+## Features (English)
 
-## Features
+- Daily Ramadan schedule: one juz per day (30 days).
+- Weekly annual schedule: 46-week cycle to continue the reading through the year.
+- Custom starting juz for each person.
+- Single juz view.
+- Print-ready A4 landscape 5-column layout.
+- No external dependencies.
 
-- **Daily Ramadan Schedule**: One juz per day for 30 days
-- **Weekly Annual Schedule**: Continuing and restarting the recitation of the Holy Quran throughout the year in a 46-week cycle.
-- **Custom Starting Juz**: Start from any juz
-- **Single Juz View**: Show the schedule for a specific juz only
-- **Print-Ready**: A4 landscape 5-column layout
+## What's New in v2 (English)
 
-## Quick Start
+- Hadith/info box added to the UI for contextual text.
+- "Show Both" feature: render both Ramadan (daily) and Annual (weekly) programs side-by-side for a selected juz (`renderBothPrograms`).
+- Animated toast notifications for success/error (`showNotification`).
+- Form validation, clear list button, and improved print layout.
+- Developer helpers: `renderList`, `showSingleCuz`, `showBothCuz`, `showAll`.
 
-Open `index.html` in your browser, set dates, and generate schedules.
+## Local Usage
 
-## How It Works
-
-1. Select start date(s).
-2. Generate a Ramadan or Annual list.
-3. (Optional) Enter a juz number and show only that juz.
-4. Print to PDF if needed.
+Open `index.html` in your browser, select dates and options, then generate and print as needed. Note: the previous index was saved as `v1.html` and the v2 content is now `index.html`.
 
 ---
 
-**Made with ❤️ for the Muslim community**
+Made with ❤️ — katkılarınız ve geliştirmeleriniz için teşekkürler.
