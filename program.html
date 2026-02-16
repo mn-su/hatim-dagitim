@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genel Okuma Programı Oluşturucu</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #d8dde4;
+            font-family: Arial, sans-serif;
+        }
+
+        .no-print {
+            background: #1f3a5f;
+            color: white;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .no-print h1 {
+            margin: 0 0 8px;
+            font-size: 22px;
+        }
+
+        .hint {
+            margin: 0 0 12px;
+            font-size: 13px;
+            color: #eaf4ff;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(300px, 1fr));
+            gap: 10px 18px;
+            max-width: 1100px;
+            margin: 0 auto 12px;
+            text-align: left;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .required {
+            color: #ffd3d3;
+        }
+
+        .form-field input,
+        .form-field textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #98a9bc;
+            border-radius: 4px;
+            padding: 7px 9px;
+            font-size: 13px;
+        }
+
+        .form-field textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .button-row {
+            margin-top: 6px;
+        }
+
+        .button-row button {
+            border: none;
+            border-radius: 4px;
+            padding: 8px 14px;
+            margin: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+
+        .btn-generate {
+            background: #16a085;
+        }
+
+        .btn-single {
+            background: #3498db;
+        }
+
+        .btn-all {
+            background: #7f8c8d;
+        }
+
+        .btn-print {
+            background: #27ae60;
+        }
+
+        .btn-clear {
+            background: #c0392b;
+        }
+
+        .page {
+            width: 297mm;
+            height: 210mm;
+            padding: 5mm;
+            margin: 10mm auto;
+            background: white;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: flex-start;
+            gap: 2mm;
+            overflow: hidden;
+            page-break-after: always;
+            --columns-per-page: 5;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .column {
+            flex: 0 0 calc((100% - (var(--columns-per-page) - 1) * 2mm) / var(--columns-per-page));
+            max-width: calc((100% - (var(--columns-per-page) - 1) * 2mm) / var(--columns-per-page));
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            font-size: 9pt;
+            font-weight: bold;
+            border-bottom: 1px solid #222;
+            background: #eef2f5;
+            padding: 3px 2px;
+        }
+
+        .title-bar {
+            text-align: center;
+            font-size: 7pt;
+            font-weight: bold;
+            background: #34495e;
+            color: white;
+            padding: 2px 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            border: 0.5px solid #666;
+            text-align: center;
+            padding: 1px 0;
+            line-height: 1.05;
+        }
+
+        th {
+            font-size: 7.6pt;
+            background: #f2f2f2;
+            padding: 1.6px 0;
+        }
+
+        td {
+            font-size: 7.6pt;
+        }
+
+        .section-cell {
+            font-weight: bold;
+            font-size: 8pt;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .notification {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 9999;
+            background: #27ae60;
+            color: white;
+            padding: 11px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            animation: slideIn 0.25s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(250px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media screen and (max-width: 1320px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page {
+                width: auto;
+                height: auto;
+                margin: 0;
+                border: none;
+                display: block;
+                padding: 10px;
+                overflow: visible;
+            }
+
+            .column {
+                width: 100%;
+                flex: 1 1 auto;
+                max-width: none;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media print {
+            body {
+                background: none;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            .page {
+                margin: 0;
+                border: none;
+                gap: 2mm;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+                -webkit-print-color-adjust: exact;
+            }
+
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="no-print">
+        <h1>Genel Okuma Programı Oluşturucu</h1>
+        <p class="hint">Zorunlu alanları doldurup toplu ya da tekli program çıktısı alabilirsiniz.</p>
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label for="programTitle">Program Başlığı <span class="required">*</span></label>
+                <input type="text" id="programTitle" value="Kur'an-ı Kerim Haftalık Hatim Programı">
+            </div>
+
+            <div class="form-field">
+                <label for="startDate">Başlangıç Tarihi <span class="required">*</span></label>
+                <input type="date" id="startDate" value="2026-03-27">
+            </div>
+
+            <div class="form-field">
+                <label for="totalSections">Toplam Bölüm/Cüz Sayısı <span class="required">*</span></label>
+                <input type="number" id="totalSections" min="1" value="30">
+            </div>
+
+            <div class="form-field">
+                <label for="totalPeriods">Toplam Satır (Dönem) Sayısı <span class="required">*</span></label>
+                <input type="number" id="totalPeriods" min="1" value="46">
+            </div>
+
+            <div class="form-field">
+                <label for="intervalDays">Periyot (Gün) <span class="required">*</span></label>
+                <input type="number" id="intervalDays" min="1" value="7">
+            </div>
+
+            <div class="form-field">
+                <label for="participantCount">Toplam Kişi Sayısı <span class="required">*</span></label>
+                <input type="number" id="participantCount" min="1" value="30">
+            </div>
+
+            <div class="form-field">
+                <label for="columnsPerPage">Sayfa Başına Kolon <span class="required">*</span></label>
+                <input type="number" id="columnsPerPage" min="1" max="10" value="6">
+            </div>
+
+            <div class="form-field">
+                <label for="singleColumn">Tekli Çıktı Kolon No (Kişi No) <span class="required">*</span></label>
+                <input type="number" id="singleColumn" min="1" value="1">
+            </div>
+
+            <div class="form-field">
+                <label for="itemLabel">Sağ Sütun Başlığı(Bölüm/Cüz) (opsiyonel)</label>
+                <input type="text" id="itemLabel" value="Cüz">
+            </div>
+
+            <div class="form-field">
+                <label for="subtitle">Alt Başlık (opsiyonel)</label>
+                <input type="text" id="subtitle" value="">
+            </div>
+
+            <div class="form-field" style="grid-column: 1 / -1;">
+                <label for="sectionNames">Bölüm Adları (opsiyonel): satır satır veya virgülle yazın</label>
+                <textarea id="sectionNames" placeholder="Boş bırakılırsa 1, 2, 3... kullanılır."></textarea>
+            </div>
+
+            <div class="form-field" style="grid-column: 1 / -1;">
+                <label for="personNames">Kişi Adları (opsiyonel): satır satır veya virgülle yazın</label>
+                <textarea id="personNames" placeholder="Boş bırakılırsa 1. KİŞİ, 2. KİŞİ... görünür. Kısmi giriş yapabilirsiniz."></textarea>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn-generate" onclick="generateAll()">Toplu Program Oluştur</button>
+            <button class="btn-single" onclick="generateSingle()">Tekli Program Oluştur</button>
+            <button class="btn-all" onclick="showAll()">Tümünü Geri Getir</button>
+            <button class="btn-print" onclick="window.print()">Yazdır</button>
+            <button class="btn-clear" onclick="clearOutput()">Temizle</button>
+        </div>
+    </div>
+
+    <div id="output"></div>
+
+    <script>
+        let lastConfig = null;
+
+        function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}.${month}.${year}`;
+        }
+
+        function parseDateInput(value) {
+            const [year, month, day] = value.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            if (type === 'error') {
+                notification.style.background = '#e74c3c';
+            }
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.25s ease-out reverse';
+                setTimeout(() => notification.remove(), 250);
+            }, 2600);
+        }
+
+        function parseSectionNames(raw) {
+            if (!raw.trim()) {
+                return [];
+            }
+            return raw
+                .split(/\n|,/)
+                .map((item) => item.trim())
+                .filter(Boolean);
+        }
+
+        function getFormValue(id) {
+            return document.getElementById(id).value;
+        }
+
+        function getPositiveInt(id, label) {
+            const value = parseInt(getFormValue(id), 10);
+            if (Number.isNaN(value) || value < 1) {
+                throw new Error(`${label} alanına 1 veya daha büyük sayı giriniz.`);
+            }
+            return value;
+        }
+
+        function collectConfig() {
+            const programTitle = getFormValue('programTitle').trim();
+            const startDateValue = getFormValue('startDate');
+            const totalSections = getPositiveInt('totalSections', 'Toplam Bölüm/Cüz Sayısı');
+            const totalPeriods = getPositiveInt('totalPeriods', 'Toplam Satır');
+            const intervalDays = getPositiveInt('intervalDays', 'Periyot');
+            const participantCount = getPositiveInt('participantCount', 'Toplam Kişi Sayısı');
+            const columnsPerPage = getPositiveInt('columnsPerPage', 'Sayfa Başına Kolon');
+            const itemLabel = getFormValue('itemLabel').trim() || 'Cüz';
+            const subtitle = getFormValue('subtitle').trim();
+            const sectionNames = parseSectionNames(getFormValue('sectionNames'));
+            const personNames = parseSectionNames(getFormValue('personNames'));
+
+            if (!programTitle) {
+                throw new Error('Program Başlığı zorunludur.');
+            }
+            if (!startDateValue) {
+                throw new Error('Başlangıç Tarihi zorunludur.');
+            }
+            if (columnsPerPage > 10) {
+                throw new Error('Sayfa Başına Kolon en fazla 10 olabilir.');
+            }
+            if (columnsPerPage > participantCount) {
+                throw new Error('Sayfa Başına Kolon, Toplam Kişi Sayısı değerinden büyük olamaz.');
+            }
+            if (sectionNames.length > 0 && sectionNames.length !== totalSections) {
+                throw new Error(`Bölüm Adları sayısı (${sectionNames.length}) ile Toplam Bölüm/Cüz sayısı (${totalSections}) eşit olmalıdır.`);
+            }
+            if (personNames.length > participantCount) {
+                throw new Error(`Kişi Adları sayısı (${personNames.length}) Toplam Kişi Sayısından (${participantCount}) büyük olamaz.`);
+            }
+
+            return {
+                programTitle,
+                startDateValue,
+                totalSections,
+                totalPeriods,
+                intervalDays,
+                participantCount,
+                columnsPerPage,
+                itemLabel,
+                subtitle,
+                sectionNames,
+                personNames
+            };
+        }
+
+        function getSectionLabel(config, sectionNumber) {
+            if (config.sectionNames.length > 0) {
+                return config.sectionNames[sectionNumber - 1];
+            }
+            return sectionNumber;
+        }
+
+        function getPersonLabel(config, personNo) {
+            const personName = config.personNames[personNo - 1];
+            if (personName) {
+                return `${personNo}. ${personName}`;
+            }
+            return `${personNo}. KİŞİ`;
+        }
+
+        function renderList(config, onlyColumn = null) {
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+
+            const startDate = parseDateInput(config.startDateValue);
+            const columns = onlyColumn
+                ? [onlyColumn]
+                : Array.from({
+                    length: config.participantCount
+                }, (_, i) => i + 1);
+
+            const totalPages = Math.ceil(columns.length / config.columnsPerPage);
+
+            for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+                const page = document.createElement('div');
+                page.className = 'page';
+                page.style.setProperty('--columns-per-page', String(config.columnsPerPage));
+
+                const pageColumns = columns.slice(
+                    pageIndex * config.columnsPerPage,
+                    pageIndex * config.columnsPerPage + config.columnsPerPage
+                );
+
+                for (const personNo of pageColumns) {
+                    const column = document.createElement('div');
+                    column.className = 'column';
+
+                    const startSection = ((personNo - 1) % config.totalSections) + 1;
+                    let html = `<div class="header">${getPersonLabel(config, personNo)}</div>`;
+                    const title = config.subtitle
+                        ? `${config.programTitle} / ${config.subtitle}`
+                        : config.programTitle;
+                    html += `<div class="title-bar">${title}</div>`;
+                    html += `<table><tr><th style="width:68%">TARİH</th><th>${config.itemLabel.toUpperCase()}</th></tr>`;
+
+                    for (let i = 0; i < config.totalPeriods; i++) {
+                        const date = new Date(startDate);
+                        date.setDate(startDate.getDate() + (i * config.intervalDays));
+                        const currentSection = ((startSection + i - 1) % config.totalSections) + 1;
+                        html += `<tr><td>${formatDate(date)}</td><td class="section-cell">${getSectionLabel(config, currentSection)}</td></tr>`;
+                    }
+
+                    html += '</table>';
+                    column.innerHTML = html;
+                    page.appendChild(column);
+                }
+
+                output.appendChild(page);
+            }
+        }
+
+        function generateAll() {
+            try {
+                const config = collectConfig();
+                lastConfig = config;
+                renderList(config);
+                showNotification('Toplu program oluşturuldu.');
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+
+        function generateSingle() {
+            try {
+                const config = collectConfig();
+                const singleColumn = getPositiveInt('singleColumn', 'Tekli Çıktı Kolon No');
+                if (singleColumn > config.participantCount) {
+                    throw new Error('Tekli Çıktı Kolon No, Toplam Kişi Sayısından büyük olamaz.');
+                }
+                lastConfig = config;
+                renderList(config, singleColumn);
+                showNotification(`${singleColumn}. kişi için tekli program oluşturuldu.`);
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+
+        function showAll() {
+            if (!lastConfig) {
+                showNotification('Önce toplu veya tekli program oluşturunuz.', 'error');
+                return;
+            }
+            renderList(lastConfig);
+            showNotification('Toplu görünüm geri getirildi.');
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '';
+            showNotification('Çıktı alanı temizlendi.');
+        }
+
+        generateAll();
+    </script>
+</body>
+
+</html>
