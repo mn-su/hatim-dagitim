@@ -20,6 +20,7 @@ Bu depo, Ramazan için günlük ve yıl boyunca haftalık Kur'an-ı Kerim okuma 
 - 📝 **Opsiyonel İsimlendirme**: Bölüm adları ve kişi adları desteği
 - 📄 **Sayfa Düzeni Kontrolü**: Sayfa başına kolon sayısı ayarı (maksimum 10)
 - 🧷 **Tekli Çıktı Stabilitesi**: Tekli görünümde kolon yerleşimi sayfa ayarıyla tutarlı
+- **Tarih sütunu boyutlandırma**: Bölüm kısmına sayı dışında değer yazılması durumunda esneklik
 
 ## 🚀 Kullanım
 
